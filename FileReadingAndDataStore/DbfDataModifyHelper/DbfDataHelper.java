@@ -121,9 +121,30 @@ public class DbfDataHelper {
 
         List<Object> firstSpeedColumn = getColumnValues(records, "1akSebesseg");
         List<Object> rFirstSpeedColumn = getColumnValues(records, "R1akSebesseg");
+        
+        for (int i = 0; i < firstSpeedColumn.size(); i++) {
+            int speed = ((Number) firstSpeedColumn.get(i)).intValue();
+            if (speed > 0 && speed < 30) {
+                speed = 30;
+                firstSpeedColumn.set(i, speed); // Update the value in the original list
+            }
+        }
+        
+        for (int i = 0; i < rFirstSpeedColumn.size(); i++) {
+            int speed = ((Number) rFirstSpeedColumn.get(i)).intValue();
+            if (speed > 0 && speed < 30) {
+                speed = 30;
+                rFirstSpeedColumn.set(i, speed); // Update the value in the original list
+            }
+        }
+        
+        int columnIndex1ak = columns.indexOf("1akSebesseg");
+        int columnIndexR1ak = columns.indexOf("R1akSebesseg");
 
-        List<Object> secondSpeedColumn = calculateNewColumnValues(firstSpeedColumn);
-        List<Object> rSecondSpeedColumn = calculateNewColumnValues(rFirstSpeedColumn);
+        List<Object> secondSpeedColumn = firstSpeedColumn;
+        List<Object> rSecondSpeedColumn = rFirstSpeedColumn;
+    //    List<Object> secondSpeedColumn = calculateNewColumnValues(firstSpeedColumn);
+    //    List<Object> rSecondSpeedColumn = calculateNewColumnValues(rFirstSpeedColumn);
 
         List<Object> thirdSpeedColumn = calculateNewColumnValues(firstSpeedColumn);
         List<Object> rThirdSpeedColumn = calculateNewColumnValues(rFirstSpeedColumn);
@@ -132,6 +153,8 @@ public class DbfDataHelper {
         List<List<Object>> updatedRecords = new ArrayList<>();
         for (int i = 0; i < records.size(); i++) {
             List<Object> row = new ArrayList<>(records.get(i));
+            row.set(columnIndex1ak, firstSpeedColumn.get(i));
+            row.set(columnIndexR1ak, rFirstSpeedColumn.get(i));
             row.add(secondSpeedColumn.get(i));
             row.add(thirdSpeedColumn.get(i));
             row.add(rSecondSpeedColumn.get(i));
