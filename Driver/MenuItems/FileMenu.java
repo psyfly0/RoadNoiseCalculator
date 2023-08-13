@@ -71,11 +71,11 @@ public class FileMenu extends javax.swing.JMenu {
         
         this.controllerManager = controllerManager;
         
-        openMenuItem = new JMenuItem("Megnyit·s");
-        saveMenuItem = new JMenuItem("MentÈs");
-        closeCurrentMenuItem = new JMenuItem("Aktu·lis projekt bez·r·sa");
-        closeAllMenuItem = new JMenuItem("Minden projekt bez·r·sa");
-        exitMenuItem = new JMenuItem("KilÈpÈs");
+        openMenuItem = new JMenuItem("Megnyit√°s");
+        saveMenuItem = new JMenuItem("Ment√©s");
+        closeCurrentMenuItem = new JMenuItem("Aktu√°lis projekt bez√°r√°sa");
+        closeAllMenuItem = new JMenuItem("Minden projekt bez√°r√°sa");
+        exitMenuItem = new JMenuItem("Kil√©p√©s");
         
         openMenuItem.addActionListener(e -> openFile(projectPanel, gui));
         saveMenuItem.addActionListener(e -> saveFile(gui));
@@ -85,7 +85,7 @@ public class FileMenu extends javax.swing.JMenu {
 
         
         // Add menu items to the menu
-        menu = new JMenu("F·jl");
+        menu = new JMenu("F√°jl");
         menu.add(openMenuItem);
         menu.add(Box.createVerticalStrut(1));
         menu.add(saveMenuItem);
@@ -134,7 +134,13 @@ public class FileMenu extends javax.swing.JMenu {
             openedFileNames.add(file.getName());
         }
         File shpFile = FileChooser.selectFile(openedFileNames);
-        if (shpFile != null && shpFile.getName().endsWith(".shp")) {
+        if (shpFile != null) {
+            String fileNameCheck = shpFile.getName();
+            String fileExtension = fileNameCheck.substring(fileNameCheck.lastIndexOf(".") + 1);
+            fileExtension = fileExtension.toLowerCase();
+            
+            if (fileExtension.equals("shp")) {
+            
             try {
                 // load all the necessary files with the same name but different extensions
                 String filePath = shpFile.getAbsolutePath().substring(0, 
@@ -143,14 +149,14 @@ public class FileMenu extends javax.swing.JMenu {
                 // Check if the required .dbf file exists
                 File dbfFile = new File(filePath + ".dbf");
                 if (!dbfFile.exists()) {
-                    OptionPane.showErrorDialog("Nem tal·lhatÛ a \"" + 
-                            dbfFile.getName() + "\" f·jl.");
+                    OptionPane.showErrorDialog("Nem tal√°lhat√≥ a \"" + 
+                            dbfFile.getName() + "\" f√°jl.");
                     return;
                 }                
                 File shxFile = new File(filePath + ".shx");
                 if (!shxFile.exists()) {
-                    OptionPane.showErrorDialog("Nem tal·lhatÛ a \"" + 
-                            shxFile.getName() + "\" f·jl.");
+                    OptionPane.showErrorDialog("Nem tal√°lhat√≥ a \"" + 
+                            shxFile.getName() + "\" f√°jl.");
                     return;
                 }
 
@@ -208,10 +214,10 @@ public class FileMenu extends javax.swing.JMenu {
                 ex.printStackTrace();
             }
         } else if (shpFile != null) {
-            OptionPane.showErrorDialog("Nem megfelelı f·jlform·tum. "
-                    + "V·lassz .shp kiterjesztÈst!");
+            OptionPane.showErrorDialog("Nem megfelel≈ë f√°jlform√°tum. "
+                    + "V√°lassz .shp kiterjeszt√©st!");
         }
-        
+        }
     }
     
     /**
@@ -231,33 +237,33 @@ public class FileMenu extends javax.swing.JMenu {
                 if (outputShapeFile.exists()) {
                     // File already exists, show a confirmation dialog
                     boolean confirmed = OptionPane.
-                            showConfirmDialog("A f·jl m·r lÈtezik! Fel¸lÌrod?");
+                            showConfirmDialog("A f√°jl m√°r l√©tezik! Fel√ºl√≠rod?");
                     if (confirmed) {
                         try {
                             shapeNoiseOutputController.
                                     saveShapefile(outputShapeFile, selectedIndex);
-                            OptionPane.showInfoDialog("F·jl sikeresen mentve: " 
+                            OptionPane.showInfoDialog("F√°jl sikeresen mentve: " 
                                     + outputShapeFile.getPath());
                         } catch (IOException ex) {
-                            OptionPane.showErrorDialog("Sikertelen mentÈs!");
+                            OptionPane.showErrorDialog("Sikertelen ment√©s!");
                             ex.printStackTrace();
                         }
                     } else {
-                        OptionPane.showInfoDialog("MentÈs megszakÌtva!");
+                        OptionPane.showInfoDialog("Ment√©s megszak√≠tva!");
                     }
                 } else {
                     try {
                         shapeNoiseOutputController.
                                 saveShapefile(outputShapeFile, selectedIndex);
-                        OptionPane.showInfoDialog("F·jl sikeresen mentve: " + 
+                        OptionPane.showInfoDialog("F√°jl sikeresen mentve: " + 
                                 outputShapeFile.getPath());
                     } catch (IOException ex) {
-                        OptionPane.showErrorDialog("Sikertelen mentÈs!");
+                        OptionPane.showErrorDialog("Sikertelen ment√©s!");
                         ex.printStackTrace();
                     }
                 }
             } else {
-                OptionPane.showErrorDialog("Sikertelen mentÈs!");
+                OptionPane.showErrorDialog("Sikertelen ment√©s!");
             }
         }
     }
@@ -334,7 +340,7 @@ public class FileMenu extends javax.swing.JMenu {
     */
     private void exitApplication() {
         boolean confirmExit = OptionPane.
-                showConfirmDialog("Biztos ki akarsz lÈpni?");
+                showConfirmDialog("Biztos ki akarsz l√©pni?");
         if (confirmExit) {
             System.exit(0);
         }
