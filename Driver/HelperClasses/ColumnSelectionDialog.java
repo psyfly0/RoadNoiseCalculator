@@ -92,7 +92,7 @@ public class ColumnSelectionDialog extends JDialog {
             ControllerManager controllerManager,
             Map<String, String> previousSelection) throws IOException { 
         
-        super(owner, "Oszlopok p·rosÌt·sa", true);
+        super(owner, "Oszlopok p√°ros√≠t√°sa", true);
         
         this.controllerManager = controllerManager;
         this.previousSelection = previousSelection;
@@ -210,7 +210,7 @@ public class ColumnSelectionDialog extends JDialog {
                     String previousValue = selectedColumnMap.remove(columnName);
                     if (previousValue != null) {
                         // Put and remove the value
-                        selectedColumnMap.put(columnName, selectedValue);
+                  //      selectedColumnMap.put(columnName, selectedValue);
 
                         // Add the deselected value back to availableColumnNames
                         availableColumnNames.put(selectedIndex, previousValue);
@@ -236,7 +236,7 @@ public class ColumnSelectionDialog extends JDialog {
     }
 
     // Create the checkbox for using the previous selection
-    usePreviousSelectionCheckBox = new JCheckBox("Haszn·ljuk az elızı p·rosÌt·st?");
+    usePreviousSelectionCheckBox = new JCheckBox("Haszn√°ljuk az el≈ëz≈ë p√°ros√≠t√°st?");
     usePreviousSelectionCheckBox.addActionListener(e -> {
         usePreviousSelection = usePreviousSelectionCheckBox.isSelected();
 
@@ -300,8 +300,8 @@ public class ColumnSelectionDialog extends JDialog {
                     isAccepted = true;
                     dispose();
                 } else {
-                    OptionPane.showInfoDialog("Minden v·laszthatÛ oszlopnevet "
-                            + "fel kell haszn·lni!");
+                    OptionPane.showInfoDialog("Minden v√°laszthat√≥ oszlopnevet "
+                            + "fel kell haszn√°lni!");
                 }
             }
         });
