@@ -87,7 +87,11 @@ public class ShapeFileWriter {
             
         for (String columnName : columns) {
             columnName = WriterHelper.truncateNames(columnName);
-            typeBuilder.add(columnName, Object.class);
+            
+            // Determine the appropriate data type for each column
+            Class<?> columnType = WriterHelper.determineColumnType(columnName);
+            
+            typeBuilder.add(columnName, columnType);
         }
         SimpleFeatureType featureType = typeBuilder.buildFeatureType();
 
@@ -108,11 +112,10 @@ public class ShapeFileWriter {
         for (int i = 0; i < records.size(); i++) {
             Geometry geometry = geometries.get(i);
             Geometry densifiedGeometry = WriterHelper.densifyGeometry(geometry, 2.0); // Densify with a step of 2 meters
-        featureBuilder.add(densifiedGeometry);
+            featureBuilder.add(densifiedGeometry);
             List<Object> record = records.get(i);
             for (int j = 0; j < record.size(); j++) {
                 Object attributeValue = record.get(j);
-             //   String columnName = columns.get(j);
                 featureBuilder.add(attributeValue);
             }
             
@@ -220,7 +223,8 @@ public class ShapeFileWriter {
             transaction.close();
         }
         dataStore.dispose();
-    }
+    }  
+    
 
 
     
