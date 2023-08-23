@@ -5,7 +5,9 @@
  */
 package Saving.Writer;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,26 +112,26 @@ public class WriterHelper {
         if (columnName.contains("Nappali LAM")) {
             String numberPart = extractNumberPart(columnName);;
             return truncatedName = numberPart + "_m_N";
-        } else if (columnName.contains("Éjjeli LAM")) {
+        } else if (columnName.contains("Ã‰jjeli LAM")) {
             String numberPart = extractNumberPart(columnName);
             return truncatedName = numberPart + "_m_E";
         } else if (columnName.contains("LAeq N") 
-                && columnName.contains("között")) {
+                && columnName.contains("kÃ¶zÃ¶tt")) {
             return truncatedName = "LAeq_KUL_N";
         } else if (columnName.contains("LAeq E") 
-                && columnName.contains("között")) {
+                && columnName.contains("kÃ¶zÃ¶tt")) {
             return truncatedName = "LAeq_KUL_E";
         } else if (columnName.contains("Vedotavolsag N") 
-                && columnName.contains("között")) {
+                && columnName.contains("kÃ¶zÃ¶tt")) {
             return truncatedName = "VedT_KUL_N";
         } else if (columnName.contains("Vedotavolsag E") 
-                && columnName.contains("között")) {
+                && columnName.contains("kÃ¶zÃ¶tt")) {
             return truncatedName = "VedT_KUL_E";
         } else if (columnName.contains("Hatasterulet N") 
-                && columnName.contains("között")) {
+                && columnName.contains("kÃ¶zÃ¶tt")) {
             return truncatedName = "HatT_KUL_N";
         } else if (columnName.contains("Hatasterulet E")
-                && columnName.contains("között")) {
+                && columnName.contains("kÃ¶zÃ¶tt")) {
             return truncatedName = "HatT_KUL_E";
         }
 
@@ -137,7 +139,7 @@ public class WriterHelper {
     }    
     
     /**
-    * Extracts the number part from the given column name, which is enclosed between "szint<br>" and " méteren" tags.
+    * Extracts the number part from the given column name, which is enclosed between "szint<br>" and " mÃ©teren" tags.
     * The extracted number part is trimmed and returned as a string.
     *
     * @param columnName the column name containing the number part to be extracted
@@ -145,8 +147,31 @@ public class WriterHelper {
     */
     public static String extractNumberPart(String columnName) {
         int startIndex = columnName.indexOf("szint<br>") + "szint<br>".length();
-        int endIndex = columnName.indexOf(" méteren");
+        int endIndex = columnName.indexOf(" mÃ©teren");
         String numberPart = columnName.substring(startIndex, endIndex).trim();
         return numberPart;
+    }
+    
+    public static Class<?> determineColumnType(String columnName) {             
+    List<String> objectColumnPatterns = Arrays.asList(
+        "NO", "R_NO", "1_ak_N", "2_ak_N", "3_ak_N", "R_1_ak_N", 
+        "R_2_ak_N", "R_3_ak_N", "1_ak_E", "2_ak_E", "3_ak_E", 
+        "R_1_ak_E", "R_2_ak_E", "R_3_ak_E", "1_ak_kmh", "2_ak_kmh", 
+        "3_ak_kmh", "R_1_ak_kmh", "R_2_ak_kmh", "R_3_ak_kmh"
+    );
+    
+        for (String name : objectColumnPatterns) {
+            if (columnName.matches(name)) {
+                return String.class;
+            }
+        }
+        return Double.class;
+    }
+    
+    public static Object castToColumnType(Object attributeValue, Class<?> columnType) {
+        if (columnType == Double.class) {
+            return Double.parseDouble(attributeValue.toString());
+        }
+        return null;
     }
 }
