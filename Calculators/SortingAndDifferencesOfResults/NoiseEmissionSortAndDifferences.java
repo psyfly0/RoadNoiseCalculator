@@ -121,7 +121,7 @@ public class NoiseEmissionSortAndDifferences {
                 break;
                 
             default:
-                 throw new IllegalArgumentException("Nem megfelelõ választott opció");                  
+                 throw new IllegalArgumentException("Nem megfelelÅ‘ vÃ¡lasztott opciÃ³");                  
         }
         return differences;
     }
@@ -249,7 +249,7 @@ public class NoiseEmissionSortAndDifferences {
                                 getFilteredDbfData(resultIndex).getRecord());
 
                 // Get the column index by its name
-                String dayDecibelDifferenceColumnName = "LAeq Nappal különbsége";
+                String dayDecibelDifferenceColumnName = "LAeq Nappal kÃ¼lÃ¶nbsÃ©ge";
                 int dayDecibelDifferenceColumnIndex = 
                         getColumnIndex(dayDecibelDifferenceColumnName, resultIndex);
 
@@ -267,7 +267,7 @@ public class NoiseEmissionSortAndDifferences {
                                 getFilteredDbfData(resultIndex).getRecord());
 
                 // Get the column index by its name
-                String nightDecibelDifferenceColumnName = "LAeq Ejjel különbsége";
+                String nightDecibelDifferenceColumnName = "LAeq Ejjel kÃ¼lÃ¶nbsÃ©ge";
                 int nightDecibelDifferenceColumnIndex = 
                         getColumnIndex(nightDecibelDifferenceColumnName, resultIndex);
 
@@ -278,7 +278,7 @@ public class NoiseEmissionSortAndDifferences {
 
                 return reorderRows(nightDecibelDataDifference);
             default:
-                throw new IllegalArgumentException("Nem megfelelõ választott opció");
+                throw new IllegalArgumentException("Nem megfelelÅ‘ vÃ¡lasztott opciÃ³");
         }       
     }
     
@@ -291,16 +291,16 @@ public class NoiseEmissionSortAndDifferences {
         List<Double> differences = new ArrayList<>();
 
         // Create a map to store the indexes of azonosito2 values
-        Map<Object, Integer> azonosito2IndexMap = new HashMap<>();
+        Map<Integer, Integer> azonosito2IndexMap = new HashMap<>();
         for (int i = 0; i < azonosito2.size(); i++) {
-            Object azonositoValue = azonosito2.get(i);
+            Integer azonositoValue = (Integer) azonosito2.get(i);
             azonosito2IndexMap.put(azonositoValue, i);
         }
 
         int remainingCount = azonosito1.size();
 
         for (int i = 0; i < values1.size(); i++) {
-            long azonositoValue1 = (Long) azonosito1.get(i);
+            Integer azonositoValue1 = (Integer) azonosito1.get(i);
 
             // Lookup the matching index in azonosito2 list
             Integer matchingIndex = azonosito2IndexMap.get(azonositoValue1);
