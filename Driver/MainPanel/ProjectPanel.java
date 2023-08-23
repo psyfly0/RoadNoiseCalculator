@@ -38,6 +38,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -111,7 +112,9 @@ public class ProjectPanel extends JPanel {
         isSortedFlags.add(false);
 
         // Create the JTable and add it to the ProjectPanel
+        
         JTable table = new JTable(tableModel) {
+            
             // Allow editing only when Enter is pressed
             @Override
             public boolean editCellAt(int row, int column, EventObject e) {
@@ -125,7 +128,7 @@ public class ProjectPanel extends JPanel {
             }
 
         };
- 
+
         addRightClickMenu(controllerManager, table);
 
         tables.add(table);
@@ -515,14 +518,13 @@ public class ProjectPanel extends JPanel {
                     int row = table.rowAtPoint(e.getPoint());
                     if (row >= 0 && row < table.getRowCount()) {
                         // Highlight the clicked row
-                        table.setRowSelectionInterval(row, row);
-                        
-
+                      //  table.setRowSelectionInterval(row, row);
+                        table.getSelectionModel().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
                         JPopupMenu popupMenu = new JPopupMenu();
 
                         // Menu item for modifying parameters
                         JMenuItem modifyItem = 
-                                new JMenuItem("Számítási paraméterek módosítása");
+                                new JMenuItem("SzÃ¡mÃ­tÃ¡si paramÃ©terek mÃ³dosÃ­tÃ¡sa");
                         modifyItem.addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
@@ -557,23 +559,30 @@ public class ProjectPanel extends JPanel {
                         popupMenu.addSeparator();
 
                         // Menu item for deleting a row
-                        JMenuItem deleteItem = new JMenuItem("Sor törlése");
+                        JMenuItem deleteItem = new JMenuItem("Sor tÃ¶rlÃ©se");
                         deleteItem.addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                int selectedIndex = 
-                                        gui.getTabbedPane().getSelectedIndex();
-                                int rowIndex = table.convertRowIndexToModel(row);
-                                
+                                int selectedIndex = gui.getTabbedPane().getSelectedIndex();
+                                int[] selectedRows = table.getSelectedRows();
+                                 int count = 0;
                                  // Show a confirmation dialog
                                 boolean confirmed = 
-                                        OptionPane.showConfirmDialog("Biztos törölni akarod a sort?");
-                                
+                                        OptionPane.showConfirmDialog("Biztos tÃ¶rÃ¶lni akarod a sort?");
+                                int[] previouslySelectedRows = table.getSelectedRows();
                                 if (confirmed) {
+                                    for (int selectedRow : selectedRows) {   
+                                        if (count != 0) {
                                     modifierController.deleteRow(dbfController.
                                             getFilteredDbfData(selectedIndex),
-                                            rowIndex);
-
+                                            selectedRow - count);
+                                        } else {
+                                           modifierController.deleteRow(dbfController.
+                                            getFilteredDbfData(selectedIndex),
+                                            selectedRow); 
+                                        }
+                                    count++;
+                                    }
                                     // Refresh the display of the modified data in the GUI
                                     List<List<Object>> recordAfterDeletingRow = 
                                             dbfController.getRecord(selectedIndex);
@@ -583,7 +592,6 @@ public class ProjectPanel extends JPanel {
 
                                     gui.updateFileTab(selectedIndex, scrollPane);
                                 }
-                                
                             }
                         });
                         popupMenu.add(deleteItem);
